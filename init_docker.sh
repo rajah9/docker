@@ -1,16 +1,21 @@
 # initialize docker with volumes
 docker volume create mymediavol
 docker volume create myconfigvol
+
+# initialize network
+docker network create \
+  --driver=bridge \
+  --subnet=172.28.5.0/16 \
+  mynet
+
 docker container create --name myMediaBox -it \
  --restart=always \
  --mount source=mymediavol,target=/media \
  --mount source=myconfigvol,target=/etc \
+ --network mynet \
  busybox
 
 # docker run -it -v /media --name mymediavol ubuntu bash
-
-# initialize network
-docker network create mynet
 
 # Start the new container
 docker container start myMediaBox

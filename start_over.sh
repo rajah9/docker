@@ -7,6 +7,7 @@ docker stop vpn
 docker container stop mymedia
 docker container rm mymedia
 docker volume rm mymediavol
+docker stop mymedia
 
 # purge unused or dangling images
 docker system prune -a

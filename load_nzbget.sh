@@ -10,7 +10,7 @@ docker create \
   -e PGID=1000 \
   -e TZ=America/New_York \
   -p 6789:6789 \
-  -v /docker/nzbget/config:/config \
+  -v /etc:/config \
   -v /media/complete:/downloads \
   -v /media/incomplete:/intermediate \
   --restart unless-stopped \
@@ -28,15 +28,7 @@ echo "place the above IP address in the Host field in sonarr for Nzbget."
 echo "Done."
 
 echo "Creating dirs and setting permissions"
-docker exec -it nzbget mkdir -p /docker/nzbget/config
-docker exec -it nzbget mkdir -p /docker/nzbget/queue
-docker exec -it nzbget mkdir -p /usr/local/share/nzbget
-docker exec -it nzbget mkdir -p /usr/local/etc
-docker exec -it nzbget mkdir -p /docker/nzbget/scripts
-docker exec -it nzbget mkdir -p /usr/local/share/nzbget/webui
 docker exec -it nzbget mkdir -p /etc/ssl/certs
-docker exec -it nzbget chmod u=rwx,g=rwx,o=rwx /docker/nzbget/config
-docker exec -it nzbget ls -lah /docker/nzbget/
 
 echo "Done."
 

@@ -2,7 +2,9 @@
 
 docker create --name=sonarr --restart=always -p 8989:8989 \
 --network mynet \
--e PUID=1001 -e PGID=1001 -v /dev/rtc:/dev/rtc:ro \
+-e PUID=1000 -e PGID=1000 \
+-e TZ=America/New_York \
+-e UMASK_SET=022 \
 -v /etc:/config \
 -v /media/complete/tv:/tv \
 -v /media/complete:/downloads \
@@ -13,4 +15,4 @@ echo "starting sonarr."
 docker start sonarr
 
 echo "Please test sonarr at http://127.0.0.1:8989/"
-echo "Done."
+echo "Don't forget to ./load_nord."
