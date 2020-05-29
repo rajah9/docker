@@ -1,0 +1,71 @@
+version: "3"
+
+volumes:
+  testvoli:
+    driver: local
+    driver_opts:
+      type: none
+      device: /media
+      o: bind,uid=1000
+  testvolc:
+    driver: local
+    driver_opts:
+      type: none
+      device: /media/complete
+      o: bind,uid=1000
+  testconfig:
+    driver: local
+    driver_opts:
+      type: none
+      device: /etc/docker
+      o: bind, uid=1000
+
+services:
+
+  sabnzbd:
+    image: linuxserver/sabnzbd
+    container_name: sabnzbd
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - testconfig:/config
+      - testvoli:/incomplete-downloads
+      - testvolc:/downloads
+    ports:
+      - 8080:8080
+      - 9090:9090
+    restart: unless-stopped
+    
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+      - UMASK_SET=022 #optional
+    volumes:
+      - testconfig:/config
+      - testvoli:/tv
+      - testvoli:/downloads
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+
+  couchpotato:
+    image: linuxserver/couchpotato
+    container_name: couchpotato
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+      - UMASK_SET=022
+    volumes:
+      - testconfig:/config
+      - testvoli:/movies
+      - testvoli:/downloads
+    ports:
+      - 5050:5050
+    restart: unless-stopped

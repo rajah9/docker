@@ -31,3 +31,13 @@ echo "type docker exec -it myMediaBox sh and enter these"
 #   mkdir complete/tv
 #   mkdir complete/movies
 
+# Changing permissions for /media and below
+cd /media
+mkdir incomplete
+mkdir complete
+cd complete
+mkdir tv
+mkdir movies
+cd /media
+chmod -R 755 .
+
