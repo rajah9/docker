@@ -5,14 +5,24 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ./incomplete 
+      device: /etc/docker/Downloads/incomplete 
       o: bind,uid=1000
   testvolc:
     driver: local
     driver_opts:
       type: none
-      device: ./complete/movies
+      device: /etc/docker/Downloads
       o: bind,uid=1000
+  testvolm:
+    driver: local
+    driver_opts:
+      type: none
+      device: /etc/docker/Downloads/complete/movies
+  testvolt:
+    driver: local
+    driver_opts:
+      type: none
+      device: /etc/docker/Downloads/complete/tv
   testconfig:
     driver: local
     driver_opts:
@@ -48,7 +58,7 @@ services:
       - UMASK_SET=022 #optional
     volumes:
       - testconfig:/config
-      - testvoli:/tv
+      - testvolt:/tv
       - testvoli:/downloads
     ports:
       - 8989:8989
