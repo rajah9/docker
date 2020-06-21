@@ -2,10 +2,11 @@ version: "3"
 
 volumes:
   testvoli:
+    # external: true
     driver: local
     driver_opts:
       type: none
-      device: /etc/docker/Downloads/incomplete 
+      device: /etc/docker/Downloads/incomplete
       o: bind,uid=1000
   testvolc:
     driver: local
@@ -18,11 +19,14 @@ volumes:
     driver_opts:
       type: none
       device: /etc/docker/Downloads/complete/movies
+      o: bind, uid=1000
   testvolt:
+    # external: true
     driver: local
     driver_opts:
       type: none
       device: /etc/docker/Downloads/complete/tv
+      o: bind,uid=1000
   testconfig:
     driver: local
     driver_opts:
@@ -59,7 +63,7 @@ services:
     volumes:
       - testconfig:/config
       - testvolt:/tv
-      - testvoli:/downloads
+      - testvolc:/downloads
     ports:
       - 8989:8989
     restart: unless-stopped
@@ -74,8 +78,8 @@ services:
       - UMASK_SET=022
     volumes:
       - testconfig:/config
-      - testvoli:/movies
-      - testvoli:/downloads
+      - testvolm:/movies
+      - testvolc:/downloads
     ports:
       - 5050:5050
     restart: unless-stopped
