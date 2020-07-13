@@ -1,23 +1,49 @@
-version: "3"
+version: "2.1"
 
 volumes:
   testvoli:
+    # external: true
     driver: local
     driver_opts:
       type: none
-      device: ./incomplete 
+      device: /etc/docker/Downloads/incomplete
       o: bind,uid=1000
   testvolc:
     driver: local
     driver_opts:
       type: none
-      device: ./complete/movies
+      device: /etc/docker/Downloads
+      o: bind,uid=1000
+  testvolm:
+    driver: local
+    driver_opts:
+      type: none
+      device: /etc/docker/Downloads/complete/movies
+      o: bind, uid=1000
+  testvolt:
+    # external: true
+    driver: local
+    driver_opts:
+      type: none
+      device: /etc/docker/Downloads/complete/tv
       o: bind,uid=1000
   testconfig:
     driver: local
     driver_opts:
       type: none
       device: /etc/docker
+      o: bind, uid=1000
+  testconfig_sonarr:
+    driver: local
+    driver_opts:
+      type: none
+      device: /etc/docker/sonarr
+      o: bind, uid=1000
+  testconfig_radarr:
+    driver: local
+    driver_opts:
+      type: none
+      device: /etc/docker/radarr
       o: bind, uid=1000
 
 services:
@@ -47,25 +73,26 @@ services:
       - TZ=America/New_York
       - UMASK_SET=022 #optional
     volumes:
-      - testconfig:/config
-      - testvoli:/tv
-      - testvoli:/downloads
+      - testconfig_sonarr:/config
+      - testvolt:/tv
+      - testvolc:/downloads
     ports:
       - 8989:8989
     restart: unless-stopped
-
-  couchpotato:
-    image: linuxserver/couchpotato
-    container_name: couchpotato
+  
+  radarr:
+    image: linuxserver/radarr
+    container_name: radarr
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=America/New_York
-      - UMASK_SET=022
+      - UMASK_SET=022 #optional
     volumes:
-      - testconfig:/config
-      - testvoli:/movies
-      - testvoli:/downloads
+      - testconfig_radarr:/config
+      - testvolm:/movies
+      - testvolc:/downloads
     ports:
-      - 5050:5050
+      - 7878:7878
     restart: unless-stopped
+
